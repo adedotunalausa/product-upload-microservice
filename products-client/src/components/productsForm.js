@@ -120,6 +120,13 @@ const ProductsForm = ({ classes, ...props }) => {
         onChange={(e) => handleInputChange(e, "product_varieties")}
       />
       <TextField
+        name="product_varieties:size"
+        label="Size"
+        fullWidth
+        value={values.product_varieties.size}
+        onChange={(e) => handleInputChange(e, "product_varieties")}
+      />
+      <TextField
         name="date_uploaded"
         label="Date Uploaded"
         type="date"

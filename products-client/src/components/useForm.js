@@ -10,8 +10,7 @@ const useForm = (initialFieldValues, setCurrentId) => {
     if (parent) {
       setValues({
         ...values,
-        [parent]: { ...values[parent] },
-        [parent]: { [name.split(":")[1]]: value },
+        [parent]: { ...values[parent], [name.split(":")[1]]: value },
       });
     } else {
       setValues({
