@@ -1,10 +1,10 @@
-import { Button, TextField, withStyles } from '@material-ui/core'
-import React, { useEffect } from 'react'
-import useForm from "./useForm"
-import { connect } from "react-redux"
-import * as actions from "../actions/products"
-import ButterToast, { Cinnamon } from "butter-toast"
-import { AssignmentTurnedIn } from "@material-ui/icons"
+import { Button, TextField, withStyles } from "@material-ui/core";
+import React, { useEffect } from "react";
+import useForm from "./useForm";
+import { connect } from "react-redux";
+import * as actions from "../actions/products";
+import ButterToast, { Cinnamon } from "butter-toast";
+import { AssignmentTurnedIn } from "@material-ui/icons";
 
 const initialFieldValues = {
   product_name: "",
@@ -13,47 +13,47 @@ const initialFieldValues = {
     size: "",
     color: "",
     quantity: "",
-    price: ""
+    price: "",
   },
   date_uploaded: "",
-  date_edited: ""
-}
+  date_edited: "",
+};
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-    '& .MuiTextField-root': {
-      margin: theme.spacing(1)
+    "& .MuiTextField-root": {
+      margin: theme.spacing(1),
     },
   },
   form: {
     display: "flex",
     flexWrap: "wrap",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   submitBtn: {
-    width: "50%"
-  }
-})
+    width: "50%",
+  },
+});
 
 const ProductsForm = ({ classes, ...props }) => {
-
   useEffect(() => {
     if (props.currentId != 0) {
       setValues({
-        ...props.productsList.find(x => x._id == props.currentId)
-      })
-      setErrors({})
+        ...props.productsList.find((x) => x._id == props.currentId),
+      });
+
+      setErrors({});
     }
-  }, [props.currentId])
+  }, [props.currentId]);
 
   const validate = () => {
-    let temp = { ...errors }
-    temp.title = values.product_name ? "" : "This field is required."
+    let temp = { ...errors };
+    temp.title = values.product_name ? "" : "This field is required.";
     setErrors({
-      ...temp
-    })
-    return Object.values(temp).every(x => x == "")
-  }
+      ...temp,
+    });
+    return Object.values(temp).every((x) => x == "");
+  };
 
   const {
     values,
@@ -61,28 +61,29 @@ const ProductsForm = ({ classes, ...props }) => {
     errors,
     setErrors,
     handleInputChange,
-    resetForm
-  } = useForm(initialFieldValues, props.setCurrentId)
+    resetForm,
+  } = useForm(initialFieldValues, props.setCurrentId);
 
-  const handleSubmit = event => {
-    event.preventDefault()
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
     const onSuccess = () => {
       ButterToast.raise({
-        content: <Cinnamon.Crisp
-          tittle="Avios"
-          content="Uploaded Successfully"
-          scheme={Cinnamon.Crisp.SCHEME_BLUE}
-          icon={<AssignmentTurnedIn />}
-        />
-      })
-      resetForm()
-    }
+        content: (
+          <Cinnamon.Crisp
+            tittle="Avios"
+            content="Uploaded Successfully"
+            scheme={Cinnamon.Crisp.SCHEME_BLUE}
+            icon={<AssignmentTurnedIn />}
+          />
+        ),
+      });
+      resetForm();
+    };
     if (validate())
-      if (props.currentId == 0)
-        props.createProduct(values, onSuccess)
-      else
-        props.updateProduct(props.currentId, values, onSuccess)
-  }
+      if (props.currentId == 0) props.createProduct(values, onSuccess);
+      else props.updateProduct(props.currentId, values, onSuccess);
+  };
 
   return (
     <form
@@ -97,7 +98,10 @@ const ProductsForm = ({ classes, ...props }) => {
         fullWidth
         value={values.product_name}
         onChange={handleInputChange}
-        {...(errors.product_name && { error: true, helperText: errors.product_name })}
+        {...(errors.product_name && {
+          error: true,
+          helperText: errors.product_name,
+        })}
       />
       <TextField
         name="product_description"
@@ -109,11 +113,11 @@ const ProductsForm = ({ classes, ...props }) => {
         onChange={handleInputChange}
       />
       <TextField
-        name="product_varieties"
+        name="product_varieties:color"
         label="Color"
         fullWidth
-        value={values.product_varieties}
-        onChange={handleInputChange}
+        value={values.product_varieties.color}
+        onChange={(e) => handleInputChange(e, "product_varieties")}
       />
       <TextField
         name="date_uploaded"
@@ -145,18 +149,21 @@ const ProductsForm = ({ classes, ...props }) => {
         className={classes.submitBtn}
       >
         Upload
-        </Button>
+      </Button>
     </form>
-  )
-}
+  );
+};
 
-const mapStateToProps = state => ({
-  productsList: state.products.list
-})
+const mapStateToProps = (state) => ({
+  productsList: state.products.list,
+});
 
 const mapActionToProps = {
   createProduct: actions.create,
-  updateProduct: actions.update
-}
+  updateProduct: actions.update,
+};
 
-export default connect(mapStateToProps, mapActionToProps)(withStyles(styles)(ProductsForm))
+export default connect(
+  mapStateToProps,
+  mapActionToProps
+)(withStyles(styles)(ProductsForm));
